@@ -6,6 +6,10 @@ const PORT = 3000;
 app.use(express.json());
 app.set('view engine', 'ejs');
 
+app.get('/', (req, res) => {
+  res.send('Hello World');
+});
+
 let todos = [];
 let nextId = 1;
 
