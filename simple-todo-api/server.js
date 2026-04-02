@@ -10,8 +10,11 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-let books = [];
-let nextId = 1;
+let books = [
+  { id: 1, title: "The Great Gatsby" },
+  { id: 2, title: "1984" }
+];
+let nextId = 3;
 
 app.get('/books', (req, res) => {
   res.json(books);
@@ -21,7 +24,7 @@ app.post('/books', (req, res) => {
   const { title } = req.body;
   const newBook = { id: nextId++, title };
   books.push(newBook);
-  res.status(201).json(newBook);
+  res.status(201).json(books);
 });
 
 app.patch('/books/:id', (req, res) => {
