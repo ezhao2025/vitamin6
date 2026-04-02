@@ -10,45 +10,42 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-let todos = [];
+let books = [];
 let nextId = 1;
 
-app.get('/todos', (req, res) => {
-  res.json(todos);
+app.get('/books', (req, res) => {
+  res.json(books);
 });
 
-app.post('/todos', (req, res) => {
-  const { task } = req.body;
-  const newTodo = { id: nextId++, task };
-  todos.push(newTodo);
-  res.status(201).json(newTodo);
+app.post('/books', (req, res) => {
+  const { title } = req.body;
+  const newBook = { id: nextId++, title };
+  books.push(newBook);
+  res.status(201).json(newBook);
 });
 
-app.patch('/todos/:id', (req, res) => {
+app.patch('/books/:id', (req, res) => {
   const { id } = req.params;
-  const { task } = req.body;
-  const todo = todos.find((t) => t.id === parseInt(id));
-
-  if (todo) {
-    todo.task = task;
-    res.json(todo);
+  const { title } = req.body;
+  const book = books.find((b) => b.id === parseInt(id));
+  if (book) {
+    book.title = title;
+    res.json(book);
   } else {
-    res.status(404).send('To-Do item not found');
+    res.status(404).send('Book not found');
   }
 });
 
-app.delete('/todos/:id', (req, res) => {
+app.delete('/books/:id', (req, res) => {
   const { id } = req.params;
-  todos = todos.filter((t) => t.id !== parseInt(id));
-  res.json(todos);
+  books = books.filter((b) => b.id !== parseInt(id));
+  res.json(books);
 });
 
-// EJS route
-app.get('/todos/view', (req, res) => {
-  res.render('todos', { todos });
+app.get('/books/view', (req, res) => {
+  res.render('books', { books });
 });
 
-// Secrets route
 app.get('/secrets', (req, res) => {
   res.send(process.env.SPOTIFY_KEY);
 });
