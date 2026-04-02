@@ -1,22 +1,26 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.set('view engine', 'ejs');
 
 let todos = [];
+let nextId = 1;
+
 app.get('/todos', (req, res) => {
   res.json(todos);
 });
 
 app.post('/todos', (req, res) => {
   const { task } = req.body;
-  const newTodo = { id: todos.length + 1, task };
+  const newTodo = { id: nextId++, task };
   todos.push(newTodo);
   res.status(201).json(newTodo);
 });
 
-app.put('/todos/:id', (req, res) => {
+app.patch('/todos/:id', (req, res) => {
   const { id } = req.params;
   const { task } = req.body;
   const todo = todos.find((t) => t.id === parseInt(id));
@@ -32,7 +36,17 @@ app.put('/todos/:id', (req, res) => {
 app.delete('/todos/:id', (req, res) => {
   const { id } = req.params;
   todos = todos.filter((t) => t.id !== parseInt(id));
-  res.status(204).send();
+  res.json(todos);
+});
+
+// EJS route
+app.get('/todos/view', (req, res) => {
+  res.render('todos', { todos });
+});
+
+// Secrets route
+app.get('/secrets', (req, res) => {
+  res.send(process.env.SPOTIFY_KEY);
 });
 
 app.listen(PORT, () => {
